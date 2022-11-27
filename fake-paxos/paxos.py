@@ -49,6 +49,7 @@ def proposer(config, id):
     s = mcast_sender()
     while True:
         msg = r.recv(2**16)
+        
         # fake proposer! just forwards message to the acceptor
         if id == 1:
             # print "proposer: sending %s to acceptors" % (msg)
