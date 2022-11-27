@@ -3,10 +3,6 @@ import sys
 import socket
 import struct
 
-# test
-
-# test
-# test
 def mcast_receiver(hostport):
     """create a multicast socket listening to the address"""
     recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
