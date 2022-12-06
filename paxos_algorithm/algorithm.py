@@ -1,3 +1,8 @@
+import sys
+import socket
+import struct
+
+
 rnd = None
 v_rnd = None
 v_val = None
@@ -10,5 +15,10 @@ class Paxos:
         self.id = id_paxos
         self.proposer = proposer
 
-    def propose(self, v, ):
+    def proposer_phase_1A(self, v):
+        #
+        pass
+    
+    
+    def acceptor_phase_1B():
         pass
