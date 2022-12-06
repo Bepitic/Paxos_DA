@@ -19,6 +19,15 @@ class Paxos:
         #
         pass
     
-    
     def acceptor_phase_1B():
+        pass
+    
+    
+    def proposer_phase_2A():
+        pass
+    
+    def acceptor_phase_2B():
+        pass
+    
+    def proposer_phase_3():
         pass
