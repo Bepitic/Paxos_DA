@@ -20,5 +20,12 @@ class Paxos:
         pass
     
     
-    def acceptor_phase_1B():
-        pass
+    def acceptor_phase_1B(self,round):
+
+        if self.c_rnd > round:
+            round = self.c_rnd
+            return {"phase": "PHASE_1B", "rnd": rnd, "v-rnd": v_rnd, "v-val": v_val}
+        else:
+            return
+        
+    
