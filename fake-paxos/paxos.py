@@ -2,6 +2,7 @@
 import sys
 import socket
 import struct
+import functions as fnc
 
 def mcast_receiver(hostport):
     """create a multicast socket listening to the address"""
