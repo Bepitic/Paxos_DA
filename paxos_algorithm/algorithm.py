@@ -29,3 +29,12 @@ class Paxos:
             return
         
     
+    
+    def proposer_phase_2A():
+        pass
+    
+    def acceptor_phase_2B():
+        pass
+    
+    def proposer_phase_3():
+        pass
