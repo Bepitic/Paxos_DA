@@ -1,9 +1,15 @@
 from time import time
 from paxos import mcast_receiver
+import json 
+
+def _decode(msg):
+    return json.loads(msg.decode())
+def _encode(jsn):
+    return json.dumps(jsn).encode('utf8')
 
 def gather_msg(t,config,id):
     be4 = time()
-    r = mcast_receiver(config['acceptors']) # is this blocking or not?
+    r = mcast_receiver(config['clients']) # is this blocking or not?
     msg_list = []
     max_size_list = 5
     # if there have not passed t seconds and the len of the list is less than max_size 
