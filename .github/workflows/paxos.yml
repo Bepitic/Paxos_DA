@@ -5,17 +5,13 @@ on:
     branches: [ main ]
 
 jobs:
-  Normal Run:
+  Normal_Run:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
     - name: Permissions
-      run: chmod +x ./fake-paxos/*.sh
-      run: chmod +x ./fake-paxos/*.py
-      run: chmod +x ./paxos_algorithm/*.sh
-      run: chmod +x ./paxos_algorithm/*.py
-      run: chmod +x ./*.sh
+      run: chmod +x ./fake-paxos/*.sh && chmod +x ./fake-paxos/*.py && chmod +x ./paxos_algorithm/*.sh && chmod +x ./paxos_algorithm/*.py && chmod +x ./*.sh
     - name: Run
       run: (./run.sh)
