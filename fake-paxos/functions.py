@@ -9,7 +9,7 @@ def _encode(jsn):
 
 def gather_msg(t,config,id):
     be4 = time()
-    r = mcast_receiver(config['acceptors']) # is this blocking or not?
+    r = mcast_receiver(config['clients']) # is this blocking or not?
     msg_list = []
     max_size_list = 5
     # if there have not passed t seconds and the len of the list is less than max_size 
