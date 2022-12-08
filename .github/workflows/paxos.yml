@@ -14,10 +14,8 @@ jobs:
     - name: Permissions
       
       run: 
-       chmod +x ./fake-paxos/*.sh ;
-       chmod +x ./fake-paxos/*.py ;
-       chmod +x ./paxos_algorithm/*.sh ;
-       chmod +x ./paxos_algorithm/*.py ;
-       chmod +x ./*.sh ;
+       chmod +x ./fake-paxos/*;
+       chmod +x ./paxos_algorithm/*;
+       chmod +x ./*;
     - name: Run
       run: (./run.sh)
