@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+*learn1
+*learn2
+
+*prop*
 # C extensions
 *.so
 
@@ -128,5 +132,3 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .vscode/settings.json
-./learn1
-./learn2
