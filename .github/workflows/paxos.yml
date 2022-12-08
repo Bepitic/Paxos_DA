@@ -19,3 +19,5 @@ jobs:
        chmod +x ./*;
     - name: Run
       run: (./run.sh fake-paxos 3)
+    - name: diff files
+      run: diff learn1 learn2
