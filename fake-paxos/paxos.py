@@ -39,7 +39,11 @@ def acceptor(config, id):
     s = mcast_sender()
     while True:
         msg = r.recv(2**16)
-        print(msg)
+        m = json.loads(msg.decode())
+        #m = json.load(msg).decode()
+        print(m)
+        print(type(m))
+        print(m['id_paxos'])
         # fake acceptor! just forwards messages to the learner
         if id == 1:
             # print "acceptor: sending %s to learners" % (msg)
