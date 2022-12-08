@@ -55,7 +55,7 @@ def proposer(config, id):
     r = mcast_receiver(config['proposers'])
     s = mcast_sender()
     while True:
-        msg = r.recv(2**16)
+        msg = r.recv(2**16) # more or less 1024 * 4 array of elements
         
         # fake proposer! just forwards message to the acceptor
         if id == 1:
