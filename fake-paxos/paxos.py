@@ -4,6 +4,7 @@ import socket
 import struct
 import functions as fnc
 import json
+from paxos_algorithm.algorithm import Paxos
 
 def mcast_receiver(hostport): # TODO : Check if this function is Bloking or not!
     """create a multicast socket listening to the address"""
@@ -46,18 +47,38 @@ def acceptor(config, id):
             s.sendto(msg, config['learners'])
 
 
+
 def proposer(config, id):
     print ('-> proposer', id)
     r = mcast_receiver(config['proposers'])
     s = mcast_sender()
+    id_paxos = 0
+    instances_of_paxos= {}
     while True:
-        msg = r.recv(2**16)
         
+        msg = r.recv(2**16)
+        if msg.origine == "client": 
+            id_paxos = id_paxos + 1
+            instance_of_paxo = Paxos(id_paxos, s, config['acceptors'])
+            instance_of_paxo.proposer_phase_1A(msg.content, proposer)
+            instances_of_paxos.update({id_paxos: instance_of_paxo})
+        elif msg.origine == "acceptor": 
+            if msg.phase == "PHASE 1B":
+               instance_of_paxos = instances_of_paxos[msg.id_paxos]
+               instance_of_paxos.proposer_phase_2A()
+            elif msg.phase == "PHASE 2B":
+                instance_of_paxos = instances_of_paxos[msg.id_paxos]
+                instance_of_paxos.proposer_phase_3()
+          
+              
         # fake proposer! just forwards message to the acceptor
-        if id == 1:
-            # print "proposer: sending %s to acceptors" % (msg)
-            m =  json.dumps({"c_rnd": (2,2), "id_paxos": 1}).encode('utf8')
-            s.sendto(m, config['acceptors'])
+        # if id == 1:
+        #     # print "proposer: sending %s to acceptors" % (msg)
+        #     m =  json.dumps({"c_rnd": (2,2), "id_paxos": 1}).encode('utf8')
+        #     s.sendto(m, config['acceptors'])
+        
+            
+        
 
 
 def learner(config, id):

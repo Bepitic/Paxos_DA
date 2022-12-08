@@ -12,7 +12,7 @@ class Paxos:
     def __init__(self, id_paxos, socket_proposer, acceptors):
         self.c_rnd = None
         self.c_val = None
-        self.id = id_paxos
+        self.id_paxos= id_paxos
         self.socket_proposer = socket_proposer
         self.acceptors  = acceptors
         self.acceptors_state = []
@@ -23,7 +23,8 @@ class Paxos:
         # increase the c-round to arbitrary unique value 
         self.c_rnd = (id_proposer, random.randint(0,100))
         self.v = v 
-        self.socket_proposer.sendto(self.c_rnd, self.acceptors)
+        m = {"c_rnd": self.c_rnd, "id_paxos": self.id_paxos}.encode('utf8')
+        self.socket_proposer.sendto(m, self.acceptors)
         
     # def acceptor(config, id):
     # print ('-> acceptor', id)
