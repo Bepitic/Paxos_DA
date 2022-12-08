@@ -14,11 +14,10 @@ jobs:
     - name: Permissions
       
       run: 
-       ls .
-       chmod +x ./fake-paxos/*.sh 
-       chmod +x ./fake-paxos/*.py 
-       chmod +x ./paxos_algorithm/*.sh 
-       chmod +x ./paxos_algorithm/*.py 
-       chmod +x ./*.sh
+       chmod +x ./fake-paxos/*.sh ;
+       chmod +x ./fake-paxos/*.py ;
+       chmod +x ./paxos_algorithm/*.sh ;
+       chmod +x ./paxos_algorithm/*.py ;
+       chmod +x ./*.sh ;
     - name: Run
       run: (./run.sh)
