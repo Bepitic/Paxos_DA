@@ -4,7 +4,7 @@ import socket
 import struct
 import functions as fnc
 
-def mcast_receiver(hostport):
+def mcast_receiver(hostport): # TODO : Check if this function is Bloking or not!
     """create a multicast socket listening to the address"""
     recv_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     recv_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
