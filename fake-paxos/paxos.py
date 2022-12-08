@@ -3,6 +3,7 @@ import sys
 import socket
 import struct
 import functions as fnc
+import json
 
 def mcast_receiver(hostport): # TODO : Check if this function is Bloking or not!
     """create a multicast socket listening to the address"""
@@ -38,6 +39,7 @@ def acceptor(config, id):
     s = mcast_sender()
     while True:
         msg = r.recv(2**16)
+        print(msg)
         # fake acceptor! just forwards messages to the learner
         if id == 1:
             # print "acceptor: sending %s to learners" % (msg)
@@ -54,7 +56,8 @@ def proposer(config, id):
         # fake proposer! just forwards message to the acceptor
         if id == 1:
             # print "proposer: sending %s to acceptors" % (msg)
-            s.sendto(msg, config['acceptors'])
+            m =  json.dumps({"c_rnd": (2,2), "id_paxos": 1}).encode('utf8')
+            s.sendto(m, config['acceptors'])
 
 
 def learner(config, id):
