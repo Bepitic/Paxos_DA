@@ -1,0 +1,21 @@
+name: TDD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  Normal Run:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Permissions
+      run: chmod +x ./fake-paxos/*.sh
+      run: chmod +x ./fake-paxos/*.py
+      run: chmod +x ./paxos_algorithm/*.sh
+      run: chmod +x ./paxos_algorithm/*.py
+      run: chmod +x ./*.sh
+    - name: Run
+      run: (./run.sh)
