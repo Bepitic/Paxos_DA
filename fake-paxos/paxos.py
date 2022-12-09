@@ -38,17 +38,28 @@ def acceptor(config, id):
     state = {}
     r = mcast_receiver(config['acceptors'])
     s = mcast_sender()
+    id_paxos = 0
+    instances_of_paxos= {}
     while True:
         msg = r.recv(2**16)
-        m = json.loads(msg.decode())
-        #m = json.load(msg).decode()
-        print(m)
-        print(type(m))
-        print(m['id_paxos'])
-        # fake acceptor! just forwards messages to the learner
-        if id == 1:
-            # print "acceptor: sending %s to learners" % (msg)
-            s.sendto(msg, config['learners'])
+        
+        if msg.origine == "proposer": 
+            if msg.phase == "PHASE 1A":
+                id_paxos = id_paxos + 1
+                instance_of_paxo= Paxos(id_paxos, s, config['proposer'])
+                instances_of_paxos.update({id_paxos: instance_of_paxo})
+                instances_of_paxos.acceptor_phase_1B(msg.c_rnd, msg.id_proposer)
+                # instance_of_paxos = instances_of_paxos[msg.id_paxos]
+                
+        # m = json.loads(msg.decode())
+        # #m = json.load(msg).decode()
+        # print(m)
+        # print(type(m))
+        # print(m['id_paxos'])
+        # # fake acceptor! just forwards messages to the learner
+        # if id == 1:
+        #     # print "acceptor: sending %s to learners" % (msg)
+        #     s.sendto(msg, config['learners'])
 
 
 
@@ -57,14 +68,16 @@ def proposer(config, id):
     r = mcast_receiver(config['proposers'])
     s = mcast_sender()
     id_paxos = 0
+    first_part_of_c_rnd = 0
     instances_of_paxos= {}
     while True:
         
         msg = r.recv(2**16)
         if msg.origine == "client": 
+            first_part_of_c_rnd = first_part_of_c_rnd + 1
             id_paxos = id_paxos + 1
             instance_of_paxo = Paxos(id_paxos, s, config['acceptors'])
-            instance_of_paxo.proposer_phase_1A(msg.content, proposer)
+            instance_of_paxo.proposer_phase_1A(msg.content, id, first_part_of_c_rnd)
             instances_of_paxos.update({id_paxos: instance_of_paxo})
         elif msg.origine == "acceptor": 
             if msg.phase == "PHASE 1B":
@@ -73,7 +86,7 @@ def proposer(config, id):
             elif msg.phase == "PHASE 2B":
                 instance_of_paxos = instances_of_paxos[msg.id_paxos]
                 instance_of_paxos.proposer_phase_3()
-          
+                
               
         # fake proposer! just forwards message to the acceptor
         # if id == 1:
