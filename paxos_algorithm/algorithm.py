@@ -2,45 +2,36 @@ import sys
 import socket
 import struct
 import random
-
+import json
 rnd = None
 v_rnd = None
 v_val = None
 
 
 class Paxos:
-    def __init__(self, id_paxos, socket_proposer, acceptors):
+    def __init__(self, id_paxos, socket_proposer, receivers):
         self.c_rnd = None
         self.c_val = None
         self.id_paxos= id_paxos
         self.socket_proposer = socket_proposer
-        self.acceptors  = acceptors
-        self.acceptors_state = []
-        self.c_rnd = None
+        self.receivers  = receivers
+        # self.c_rnd = None
         self.v = None
-
-    def proposer_phase_1A(self, v, id_proposer):
-        # increase the c-round to arbitrary unique value 
-        self.c_rnd = (id_proposer, random.randint(0,100))
-        self.v = v 
-        m = {"c_rnd": self.c_rnd, "id_paxos": self.id_paxos}.encode('utf8')
-        self.socket_proposer.sendto(m, self.acceptors)
+        self.rnd = 0
         
-    # def acceptor(config, id):
-    # print ('-> acceptor', id)
-    # state = {}
-    # r = mcast_receiver(config['acceptors'])
-    # s = mcast_sender()
-    # while True:
-    #     msg = r.recv(2**16)
-    #     # fake acceptor! just forwards messages to the learner
-    #     if id == 1:
-    #         # print "acceptor: sending %s to learners" % (msg)
-    #         print(msg)
-    #         print("-------")
-    #         s.sendto(msg, config['learners'])
-    def acceptor_phase_1B(self, ):
-        # how can I REV HERE THE MESSAGE
+    def proposer_phase_1A(self, v, id_proposer, first_part_of_c_rnd):
+        # increase the c-round to arbitrary unique value 
+        #(id_proposer, random.randint(0,100))
+        self.c_rnd  = (first_part_of_c_rnd, id_proposer)
+        self.v = v 
+        msg= json.dumps({"c_rnd": self.c_rnd, "id_paxos": self.id_paxos, "id_proposer": id_proposer, "origine": "proposer", "phase": "PHASE 1A"}).encode('utf8')
+        self.socket_proposer.sendto(msg, self.receivers)
+        
+    def acceptor_phase_1B(self, c_rnd, s, id_proposer):
+        if c_rnd(0)> self.rnd:
+            rnd = c_rnd
+            s.sentto(receivers)
+        
         pass
     
     
