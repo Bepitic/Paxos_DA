@@ -5,45 +5,25 @@ import socket
 import struct
 import json
 
-class Proposer:
-    def __init__(self, proposer_id, config_proposers, config_acceptors):
-        self.proposer_id = proposer_id
-        self.config_acceptors = config_acceptors
-        self.config_proposers = config_proposers
+class Participant:
+    def __init__(self, particpiant_id, config_mcast_receiver, config_the_receivers):
+        self.particpiant_id = particpiant_id
+        self.config_the_receivers = config_the_receivers
+        self.config_mcast_receiver = config_mcast_receiver
         self.components = None
         self.mcast_receiver = None
         self.mcast_sender = None
         self.c_rnd = 0
     
     def construct(self):
-        self.mcast_receiver = mcast_receiver(self.config_proposers)
+        self.config_mcast_receiver = mcast_receiver(self.config_mcast_receiver)
         self.mcast_sender = mcast_sender
-        self.components = Components(self.proposer_id,  self.mcast_sender, self.config_acceptors)    
+        self.components = Components(self.particpiant_id,  self.mcast_sender, self.config_the_receivers)    
   
     def run(self):
         while True: 
             msg = self.mcast_receiver.recv(2**16)    
-            self.components.process_message(decode_message(msg))            
-
-
-class Acceptor: 
-    def __init__(self, acceptor_id, config_acceptors, config_proposers):
-        self.acceptor_id = acceptor_id
-        self.config_acceptors = config_acceptors
-        self.config_proposers = config_proposers
-        self.components = None
-        self.mcast_receiver = None
-        self.mcast_sender = None
-    
-    def construct(self): 
-        self.mcast_receiver = mcast_receiver(self.config_acceptors)
-        self.mcast_sender = mcast_sender()
-        self.components = Components(self.acceptor_id, self.mcast_sender, self.config_proposers)
-        
-    def run(self):
-        while True: 
-            msg = self.mcast_receiver.recv(2**16)    
-            self.components.process_message(decode_message(msg))      
+            self.components.process_message(decode_message(msg))             
     
     
 def mcast_receiver(hostport):

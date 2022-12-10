@@ -23,7 +23,7 @@ class Components:
         #     s.sentto(self.receivers)
     
         pass
-    
+
     
     def proposer_phase_2A():
         pass
