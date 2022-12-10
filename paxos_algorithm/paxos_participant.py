@@ -6,7 +6,7 @@ import struct
 import json
 
 class Proposer:
-    def __init__(self, proposer_id, config_acceptors, config_proposers):
+    def __init__(self, proposer_id, config_proposers, config_acceptors):
         self.proposer_id = proposer_id
         self.config_acceptors = config_acceptors
         self.config_proposers = config_proposers
@@ -15,7 +15,7 @@ class Proposer:
         self.mcast_sender = None
         self.c_rnd = 0
     
-    def construct_proposer(self):
+    def construct(self):
         self.mcast_receiver = mcast_receiver(self.config_proposers)
         self.mcast_sender = mcast_sender
         self.components = Components(self.proposer_id,  self.mcast_sender, self.config_acceptors)    
@@ -23,32 +23,27 @@ class Proposer:
     def run(self):
         while True: 
             msg = self.mcast_receiver.recv(2**16)    
-            self.components.process_message(decode_message(msg))        
-            
-                
-                
-            
-#   """
-#   message = {"origin" : "", "phase": "", "content": "write the message here"}
-#   """          
+            self.components.process_message(decode_message(msg))            
 
 
 class Acceptor: 
-    def __init__(self, acceptor_id, acceptors, proposers):
+    def __init__(self, acceptor_id, config_acceptors, config_proposers):
         self.acceptor_id = acceptor_id
-        self.config_acceptors = acceptors
-        self.config_proposers = proposers
+        self.config_acceptors = config_acceptors
+        self.config_proposers = config_proposers
         self.components = None
         self.mcast_receiver = None
         self.mcast_sender = None
     
-    def construct_acceptor(self, proposers, hostport): 
-        self.proposers = proposers
-        self.mcast_receiver = mcast_receiver(hostport)
+    def construct(self): 
+        self.mcast_receiver = mcast_receiver(self.config_acceptors)
         self.mcast_sender = mcast_sender()
-        self.components = Components(self.acceptor_id, self.mcast_sender, self.proposers)
-  
- 
+        self.components = Components(self.acceptor_id, self.mcast_sender, self.config_proposers)
+        
+    def run(self):
+        while True: 
+            msg = self.mcast_receiver.recv(2**16)    
+            self.components.process_message(decode_message(msg))      
     
     
 def mcast_receiver(hostport):
