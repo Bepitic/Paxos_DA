@@ -9,7 +9,7 @@ v_val = None
 
 
 class Components:
-    def __init__(self):
+    def __init__(self, proposer_id, mcast_sender, receivers):
         pass
     def proposer_phase_1A(self, v, id_proposer, first_part_of_c_rnd):
         # # increase the c-round to arbitrary unique value 
