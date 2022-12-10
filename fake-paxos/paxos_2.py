@@ -67,10 +67,11 @@ def acceptor(config, id):
 
 def proposer(config, id):
     print ('-> proposer', id)
-    proposer_obj = Proposer(id).construct_proposer(config['acceptors'], config[''])
-    proposer_obj.mcast_receiver
+    proposer_obj = Proposer(id).construct_proposer(config['acceptors'], config['proposers'])
+    r = proposer_obj.mcast_receiver
+    s = proposer_obj.mcast_sender 
     
-    pass 
+    
 
     # print ('-> proposer', id)
     # r = mcast_receiver(config['proposers'])
