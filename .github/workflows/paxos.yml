@@ -21,3 +21,6 @@ jobs:
       run: (./run.sh fake-paxos 3)
     - name: diff files
       run: diff learn1 learn2
+    
+    - name: check client val paxos
+      run: ./custom_client_value.sh
