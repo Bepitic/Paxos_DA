@@ -3,10 +3,6 @@ import socket
 import struct
 import random
 import json
-rnd = None
-v_rnd = None
-v_val = None
-
 
 class Components:
     def __init__(self, proposer_id, mcast_sender, receivers):
@@ -40,26 +36,7 @@ class Components:
     
     
 
-# proposers = [1,2,3]   
-# messages = ["a", "b", "c"]
-# id_paxos = 0
-
-
-# # TODO create e class called socket
-# def mcast_sender():
-#     """create a udp socket"""
-#     send_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-#     return send_sock
-
-# acceptors = ("239.0.0.1", 7000)
-# for v in messages: 
-
-    
-#     for proposer in proposers:
-#         socket_proposer = mcast_sender()
-#         id_paxos = id_paxos + 1
-#         instance_of_paxos = Paxos(id_paxos, proposer, socket_proposer)
-#         instance_of_paxos.proposer_phase_1A(v, proposer)
-        
+    def process_message(self, message): 
+        pass
 
     
