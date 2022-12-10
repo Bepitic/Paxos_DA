@@ -22,18 +22,23 @@ class Proposer:
   
     def run(self):
         while True: 
-            msg = self.mcast_receiver.recv(2**16)
-            msg = decode_message(msg)
-            if msg["origin"] == "client": 
-                # TODO this is not the final version of the parameters. 
-                self.components.proposer_phase_1A(msg[])
+            msg = self.mcast_receiver.recv(2**16)    
+            self.components.process_message(decode_message(msg))        
+            # self.components.process_message(decode_message(msg))
+            
+            
+            # if msg["origin"] == "client": 
+            #     # TODO this is not the final version of the parameters. 
+            #     self.components.proposer_phase_1A(msg["content"], self.proposer_id, self.c_rnd)
                 
+            # elif msg["orgin"] == "acceptor": 
+            #     if msg["phase"]
                 
                 
             
-  """
-  message = {"origin" : "", "phase": "", "content": "write the message here"}
-  """          
+#   """
+#   message = {"origin" : "", "phase": "", "content": "write the message here"}
+#   """          
 
 
 class Acceptor: 
