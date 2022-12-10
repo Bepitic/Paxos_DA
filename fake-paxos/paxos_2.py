@@ -5,7 +5,7 @@ import struct
 import functions as fnc
 import json
 from paxos_algorithm.algorithm import Components
-from paxos_algorithm.paxos_participant import Proposer, Acceptor, mcast_receiver, mcast_sender
+from paxos_algorithm.paxos_participant import Participant, mcast_receiver, mcast_sender
 
 def parse_cfg(cfgpath):
     cfg = {}
@@ -19,7 +19,7 @@ def parse_cfg(cfgpath):
 
 def acceptor(config, id):
     print ('-> acceptor', id)
-    proposer_obj = Acceptor(id, config['acceptors'], config['proposers'])
+    proposer_obj = Participant(id, config['acceptors'], config['proposers'])
     proposer_obj.construct()
     proposer_obj.run()
             
@@ -27,7 +27,7 @@ def acceptor(config, id):
 
 def proposer(config, id):
     print ('-> proposer', id)
-    proposer_obj = Proposer (id, config['proposers'], config['acceptors'])
+    proposer_obj = Participant(id, config['proposers'], config['acceptors'])
     proposer_obj.construct()
     proposer_obj.run()
         
