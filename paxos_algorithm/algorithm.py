@@ -36,7 +36,14 @@ class Components:
     
     
 
-    def process_message(self, message): 
+    def process_message(self, message):
+        
+       if message["origin"] == "client": 
+        # TODO this is not the final version of the parameters. Check again.  
+            self.proposer_phase_1A(message["content"])
+             
+        elif msg["orgin"] == "acceptor": 
+                if msg["phase"]
         pass
 
     
