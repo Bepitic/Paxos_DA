@@ -46,6 +46,7 @@ def acceptor(config, id):
         if msg.origine == "proposer": 
             if msg.phase == "PHASE 1A":
                 id_paxos = id_paxos + 1
+                # TODO this should removed. 
                 instance_of_paxo= Paxos(id_paxos, s, config['proposer'])
                 instances_of_paxos.update({id_paxos: instance_of_paxo})
                 instances_of_paxos.acceptor_phase_1B(msg.c_rnd, msg.id_proposer)
@@ -72,7 +73,11 @@ def proposer(config, id):
     instances_of_paxos= {}
     while True:
         
+        
+        
         msg = r.recv(2**16)
+        
+        
         if msg.origine == "client": 
             first_part_of_c_rnd = first_part_of_c_rnd + 1
             id_paxos = id_paxos + 1
