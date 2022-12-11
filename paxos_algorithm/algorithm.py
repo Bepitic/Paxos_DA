@@ -55,6 +55,7 @@ class Components:
         #     s.sentto(self.receivers)
     
     def proposer_phase_2A(self, rnd, v_rnd, v_val):
+        #TODO: Make the quorum
         if (self.c_rnd == rnd):
             if(self.k < v_rnd):
                 self.k = v_rnd
@@ -78,9 +79,20 @@ class Components:
             self.send(msg, self.receivers)
 
     
-    def proposer_phase_3():
-        #???????
-        pass
+    def proposer_phase_3(self, list_msg):
+        #FIXME: the number of the quorum should be a global value or a parameter to pass
+        num_Q = 2 # Minimum size of the Quorum number
+        sentinel = 0
+        for msg in list_msg:
+            v_rnd = msg['v_rnd']
+            if (v_rnd == self.c_rnd):
+                sentinel += 1
+        if(sentinel >= num_Q): #We have a quorum
+            msg = Components.build_msg("DECISION", "proposer", self.instance_paxos, self.id, {"v_val":self.v_val })
+            self.send(msg, self.receivers) # FIXME: this receivers are acceptors not learners 
+
+
+
     
     
 
