@@ -20,7 +20,6 @@ def parse_cfg(cfgpath):
 def acceptor(config, id):
     print ('-> acceptor', id)
     proposer_obj = Participant(id, config['acceptors'], config['proposers'])
-    proposer_obj.construct()
     proposer_obj.run()
             
 
@@ -28,7 +27,6 @@ def acceptor(config, id):
 def proposer(config, id):
     print ('-> proposer', id)
     proposer_obj = Participant(id, config['proposers'], config['acceptors'])
-    proposer_obj.construct()
     proposer_obj.run()
         
 
