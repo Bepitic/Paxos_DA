@@ -54,16 +54,32 @@ class Components:
         #     msg= json.dumps({"rnd": self.rnd, "id_proposer": id_proposer, "origine": "acceptor", "phase": "PHASE 1B"}).encode('utf8')
         #     s.sentto(self.receivers)
     
-    def proposer_phase_2A(self, rnd, v_rnd, v_val):
-        #TODO: Make the quorum
-        if (self.c_rnd == rnd):
-            if(self.k < v_rnd):
-                self.k = v_rnd
-                self.v = v_val
-            if (self.k == 0):
-                self.c_val = self.value
-            else:
-                self.c_val = self.v
+    def proposer_phase_2A(self,list_msg):# rnd, v_rnd, v_val):
+        #FIXME: the number of the quorum should be a global value or a parameter to pass
+        num_Q = 2 # Minimum size of the Quorum number
+        sentinel = 0
+        for msg in list_msg:
+            rnd = msg['rnd']
+            if (self.c_rnd == rnd):
+                sentinel += 1
+
+        k = -1
+        v = None
+        for msg in list_msg:
+            rnd = msg['rnd']
+            v_rnd = msg['v_rnd']
+            v_val = msg['v_val']
+            if(sentinel >= num_Q): #We have a quorum
+                if (self.c_rnd == rnd):# We are in the Quorum group
+                    if(k < v_rnd):
+                        k = v_rnd
+                        v = v_val
+                    if (k == 0):
+                        self.c_val = self.value
+                    else:
+                        self.c_val = v
+
+        if(sentinel >= num_Q): #We have a quorum
             msg = Components.build_msg("P2A", "proposer", self.instance_paxos, self.id, {"c_rnd":self.c_rnd,"c_val":self.c_val })
             self.send(msg, self.receivers)
 
