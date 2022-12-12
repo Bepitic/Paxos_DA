@@ -15,7 +15,7 @@ jobs:
       
       run: 
        chmod +x ./fake-paxos/*;
-       chmod +x ./paxos_algorithm/*;
+       chmod +x ./fake-paxos/paxos_algorithm/*;
        chmod +x ./*;
     - name: Run
       run: (./run.sh fake-paxos 3)
