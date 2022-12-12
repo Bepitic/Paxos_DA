@@ -22,5 +22,5 @@ jobs:
     - name: diff files
       run: diff learn1 learn2
     
-    - name: check client val paxos
-      run: ./custom_client_value.sh
+    - name: check client 20 val paxos
+      run: ./run_loss.sh fake-paxos 20 ; ./check_all.sh 
