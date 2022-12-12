@@ -19,12 +19,12 @@ def parse_cfg(cfgpath):
 
 def acceptor(config, id):
     print ('-> acceptor', id)
-    proposer_obj = Participant(id, config['acceptors'], config['proposers'], config['learners'], 2)
+    proposer_obj = Participant(id, config['acceptors'], config['proposers'], config['learners'], 2, False)
     proposer_obj.run()
             
 def proposer(config, id):
     print ('-> proposer', id)
-    proposer_obj = Participant(id, config['proposers'], config['acceptors'],config['learners'], 2)
+    proposer_obj = Participant(id, config['proposers'], config['acceptors'],config['learners'], 2,True)
     proposer_obj.run()
         
 def learner(config, id):
@@ -38,8 +38,9 @@ def learner(config, id):
             msg_paxos[px_id] = _decode(msg)["msg"]["v_val"] 
 
         if(sentinel in msg_paxos):
-            print(msg_paxos[sentinel]) #TODO check out if the msg is a list or a value anditerate over it
-            sys.stdout.flush()
+            for item in msg_paxos[sentinel]:
+                print(int(item)) #TODO check out if the msg is a list or a value anditerate over it
+                sys.stdout.flush()
             sentinel +=1
 
 def client(config, id):

@@ -46,9 +46,10 @@ class Components:
     def acceptor_phase_1B(self, c_rnd):
         # print(f"acceptor: {self.id} c_rnd: {c_rnd} rnd: {self.rnd}")
         # until here is correct
+        print(f"c_rnd {c_rnd} rnd {self.rnd}")
         
         if (c_rnd> self.rnd):
-            # print(f"c_rnd {c_rnd}")
+            print(f"c_rnd {c_rnd} rnd {self.rnd}")
             self.rnd = c_rnd
             # print( self.receivers)
             msg = Components.build_msg("P1B", "acceptor", self.instance_paxos, self.id, {"rnd":self.rnd, "v_rnd":self.v_rnd,"v_val":self.v_val })
@@ -104,7 +105,7 @@ class Components:
             print(msg)
             self.send(msg, self.receivers)
 
-    def proposer_phase_3(self, list_msg, listeners):
+    def proposer_phase_3(self, list_msg, listeners,proposers):
         #FIXME: the number of the quorum should be a global value or a parameter to pass
         num_Q = 2 # Minimum size of the Quorum number
         sentinel = 0
@@ -118,3 +119,4 @@ class Components:
             msg = Components.build_msg("DECISION", "proposer", self.instance_paxos, self.id, {"v_val":self.v_val})
             print(msg)
             self.send(msg, listeners) 
+            self.send(msg, proposers)
