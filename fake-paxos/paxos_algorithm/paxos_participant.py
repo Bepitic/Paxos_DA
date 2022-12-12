@@ -43,7 +43,7 @@ class Participant:
                 #print('if_a')
                 if(substract(self.A_Delivered,self.R_Del) and not self.active_paxos and self.is_proposer):
                     #print('a')
-                    undel = substract(self.A_Delivered,self.R_Del) # Duplicate in the while possible to remove
+                    undel = substract(self.A_Delivered,self.R_Del)[:100] # Duplicate in the while possible to remove
 
                     self.component = Components(self.participant_id,  self.mcast_sender, self.config_the_receivers, self.paxos_id, undel)
                     #print(f'id{self.participant_id} undel{undel}')    
@@ -54,7 +54,7 @@ class Participant:
                     self.time = time.time()
                     self.delta = random.randint(2,4)
 
-            msg = self.mcast_receiver.recv(2**16)   
+            msg = self.mcast_receiver.recv(2**29)   
             message = decode_message(msg)
             #print(f'id{self.participant_id} msg{msg}')    
 

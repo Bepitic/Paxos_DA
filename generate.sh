@@ -10,5 +10,5 @@ if [[ $n == "" ]]; then
 fi
 
 for (( i = 0; i < $n; i++ )); do
-	echo $RANDOM
+	echo $RANDOM  
 done
