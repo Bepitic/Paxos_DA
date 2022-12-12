@@ -94,10 +94,6 @@ class Components:
             print(msg)
 
             self.send(msg, self.receivers)
-
-
-
-
     
     def acceptor_phase_2B(self, c_rnd,c_val):
         if(c_rnd >= self.rnd):
@@ -108,7 +104,6 @@ class Components:
             print(msg)
             self.send(msg, self.receivers)
 
-    
     def proposer_phase_3(self, list_msg, listeners):
         #FIXME: the number of the quorum should be a global value or a parameter to pass
         num_Q = 2 # Minimum size of the Quorum number
@@ -122,12 +117,4 @@ class Components:
         if(sentinel >= num_Q): #We have a quorum
             msg = Components.build_msg("DECISION", "proposer", self.instance_paxos, self.id, {"v_val":self.v_val})
             print(msg)
-            self.send(msg, listeners) # FIXME: this receivers are acceptors not learners 
-
-
-
-    
-    
-
-
-    
+            self.send(msg, listeners) 

@@ -6,6 +6,7 @@ import functions as fnc
 import json
 from paxos_algorithm.algorithm import Components, _decode
 from paxos_algorithm.paxos_participant import Participant, mcast_receiver, mcast_sender
+
 def parse_cfg(cfgpath):
     cfg = {}
     with open(cfgpath, 'r') as cfgfile:
@@ -21,21 +22,25 @@ def acceptor(config, id):
     proposer_obj = Participant(id, config['acceptors'], config['proposers'], config['learners'], 2)
     proposer_obj.run()
             
-
-
 def proposer(config, id):
     print ('-> proposer', id)
     proposer_obj = Participant(id, config['proposers'], config['acceptors'],config['learners'], 2)
     proposer_obj.run()
         
-
 def learner(config, id):
     r = mcast_receiver(config['learners'])
+    msg_paxos = {}
+    sentinel = 0 # the first paxos id
     while True:
         msg = r.recv(2**16)
-        print(_decode(msg)["msg"]["v_val"])
-        sys.stdout.flush()
+        px_id = _decode(msg)["paxos_id"]
+        if(px_id not in msg_paxos):
+            msg_paxos[px_id] = _decode(msg)["msg"]["v_val"] 
 
+        if(sentinel in msg_paxos):
+            print(msg_paxos[sentinel]) #TODO check out if the msg is a list or a value anditerate over it
+            sys.stdout.flush()
+            sentinel +=1
 
 def client(config, id):
     print ('-> client ', id)
