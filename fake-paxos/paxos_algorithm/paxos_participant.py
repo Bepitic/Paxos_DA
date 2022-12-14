@@ -43,7 +43,7 @@ class Participant:
                 #print('if_a')
                 if(substract(self.A_Delivered,self.R_Del) and not self.active_paxos and self.is_proposer):
                     #print('a')
-                    undel = substract(self.A_Delivered,self.R_Del)[:100] # Duplicate in the while possible to remove
+                    undel = substract(self.A_Delivered,self.R_Del)[:10] # Duplicate in the while possible to remove
 
                     self.component = Components(self.participant_id,  self.mcast_sender, self.config_the_receivers, self.paxos_id, undel)
                     #print(f'id{self.participant_id} undel{undel}')    
