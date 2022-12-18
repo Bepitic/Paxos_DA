@@ -45,26 +45,54 @@ class Components:
 
     
     def proposer_phase_2A(self, list_from_quorum):
-        validate_quorum = True
-        for promise in list_from_quorum:
-            if promise["msg"]["rnd"] != self.c_rnd:
-                validate_quorum = False
+        # validate_quorum = True
+        # for promise in list_from_quorum:
+        #     if promise["msg"]["rnd"] != self.c_rnd:
+        #         validate_quorum = False
                 
-        if validate_quorum:
-            k = 0
-            list_V = []
-            for promise in list_from_quorum:
-                if promise["msg"]["v_rnd"] > k:
-                    k = promise["msg"]["v_rnd"]
+        # if validate_quorum:
+        #     k = 0
+        #     list_V = []
+        #     for promise in list_from_quorum:
+        #         if promise["msg"]["v_rnd"] > k:
+        #             k = promise["msg"]["v_rnd"]
                     
+        #     for promise in list_from_quorum:
+        #         if promise["msg"]["v_rnd"] == k:
+        #             list_V.append((promise["msg"]["v_rnd"], promise["msg"]["v_val"]))
+        #     if k == 0:
+        #         self.c_val = self.value
+        #     else: 
+        #         self.c_val = list_V[0][1]
+        sentinel = 0
+        print("1")
+        for message in list_from_quorum:
+            message['msg']['rnd']
+            rnd = message['msg']['rnd']
+
+            if (self.c_rnd == rnd):
+                sentinel += 1
+
+
+        ## shega
+        if (sentinel >= self.quorum_value):
+            k=0
+            list_v=[]
             for promise in list_from_quorum:
-                if promise["msg"]["v_rnd"] == k:
-                    list_V.append((promise["msg"]["v_rnd"], promise["msg"]["v_val"]))
+                if promise['msg']['v_rnd'] > k :
+                    k = promise['msg']['v_rnd']
+
+            for promise in list_from_quorum:
+                if promise['msg']['v_rnd'] == k :
+                    list_v.append((promise['msg']['v_rnd'] ,promise['msg']['v_val'] ))
             if k == 0:
                 self.c_val = self.value
-            else: 
-                self.c_val = list_V[0][1]
-
+            else:
+                # print(list_v)
+                self.c_val = list_v[0][1]
+                
+        if (sentinel >= self.quorum_value):
+            
             msg = Components.build_msg("P2A", "proposer", self.instance_paxos, self.id, {"c_rnd":self.c_rnd,"c_val":self.c_val})
             print(msg)
             self.send(msg, self.receivers)
@@ -78,11 +106,19 @@ class Components:
             self.send(msg, self.receivers)
 
     def proposer_phase_3(self, list_from_quorum, listeners,proposers):
-        validate_v_rnd = True
-        for accept in list_from_quorum:
-            if self.c_rnd != accept["msg"]["v_rnd"]: 
-                validate_v_rnd = False
-        if validate_v_rnd: 
+        # validate_v_rnd = True
+        # for accept in list_from_quorum:
+        #     if self.c_rnd != accept["msg"]["v_rnd"]: 
+        #         validate_v_rnd = False
+        # Paco        
+        sentinel = 0
+        for message in list_from_quorum:
+            v_rnd = message['msg']['v_rnd']
+            self.v_val =  message['msg']['v_val']
+            if (v_rnd == self.c_rnd):
+                sentinel += 1
+        if (sentinel >= self.quorum_value):
+            
             msg = Components.build_msg("DECISION", "proposer", self.instance_paxos, self.id, {"v_val":list_from_quorum[0]["msg"]["v_val"], "c_rnd": self.c_rnd})
             #print(msg)
             self.send(msg, listeners) 
