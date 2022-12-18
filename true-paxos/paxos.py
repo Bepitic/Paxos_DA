@@ -33,14 +33,12 @@ def learner(config, id):
     sentinel = 0 # the first paxos id
     while True:
         msg = r.recv(2**16)
-        paxos_id = _decode(msg)["msg"]["paxos_id"]
-        print(_decode(msg))
-        sys.stdout.flush()
-        #if(paxos_id not in msg_paxos): 
-        #    msg_paxos[paxos_id] = _decode(msg)["msg"]["v_val"] 
-        #    for i in msg_paxos[paxos_id]: 
-        #        print(i)
-        #        sys.stdout.flush()
+        paxos_id = _decode(msg)["paxos_id"]
+        if(paxos_id not in msg_paxos): 
+            msg_paxos[paxos_id] = _decode(msg)["msg"]["v_val"] 
+            for i in msg_paxos[paxos_id]: 
+                print(i)
+                sys.stdout.flush()
 
 
 def client(config, id):
