@@ -55,7 +55,7 @@ echo "starting clients..."
 # # User this command to kill the acceptor
 # ../pkill_acceptor.sh $id
 
-sleep 20
+sleep 120
 
 $KILLCMD
 wait

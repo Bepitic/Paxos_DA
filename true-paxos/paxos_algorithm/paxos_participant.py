@@ -38,7 +38,7 @@ class Proposer:
 
             if self.active_paxos==False:
                 if substract(self.A_Delivered,self.R_Del):
-                    undelivered = substract(self.A_Delivered,self.R_Del)[:500]
+                    undelivered = substract(self.A_Delivered,self.R_Del)[:10]
 
                     print(f' UNDELIVERED :{undelivered}, adel{self.A_Delivered}, R_del:{self.R_Del}')
                     component = Components(self.proposer_id,  self.mcast_sender, self.config_the_receivers, self.paxos_id, undelivered, self.c_rnd, self.quorum_value)
