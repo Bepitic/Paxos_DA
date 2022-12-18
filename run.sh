@@ -3,13 +3,14 @@
 projdir="$1"
 conf=`pwd`/paxos.conf
 n="$2"
-
+# id="$3"
 if [[ x$projdir == "x" || x$n == "x" ]]; then
 	echo "Usage: $0 <project dir> <number of values per proposer>"
     exit 1
 fi
 
 # following line kills processes that have the config file in its cmdline
+
 KILLCMD="pkill -f $conf"
 
 $KILLCMD
@@ -23,7 +24,7 @@ cd $projdir
 ../generate_2.sh $n 40000 60000 "prop2" #> ../prop2
 
 
-sleep 10
+sleep 5
 echo "starting acceptors..."
 
 ./acceptor.sh 1 $conf &
@@ -43,13 +44,18 @@ echo "starting proposers..."
 ./proposer.sh 2 $conf &
 
 echo "waiting to start clients"
-sleep 100
+sleep 5
+
 echo "starting clients..."
 
 ./client.sh 1 $conf < ../prop1 &
 ./client.sh 2 $conf < ../prop2 &
 
-sleep 200
+# sleep 1 
+# # User this command to kill the acceptor
+# ../pkill_acceptor.sh $id
+
+sleep 80
 
 $KILLCMD
 wait

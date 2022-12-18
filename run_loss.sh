@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Change the loss percentage here
-LOSS=0.1
+LOSS=0.5
 
 projdir="$1"
 conf=`pwd`/paxos.conf
@@ -21,8 +21,12 @@ cd $projdir
 
 ../loss_set.sh $LOSS
 
-../generate.sh $n > ../prop1
-../generate.sh $n > ../prop2
+# ../generate.sh $n > ../prop1
+# ../generate.sh $n > ../prop2
+
+../generate_2.sh $n 0 30000 "prop1" #> ../prop1
+../generate_2.sh $n 40000 60000 "prop2" #> ../prop2
+
 
 echo "starting acceptors..."
 
@@ -40,7 +44,7 @@ sleep 1
 echo "starting proposers..."
 
 ./proposer.sh 1 $conf &
-./proposer.sh 2 $conf &
+# ./proposer.sh 2 $conf &
 
 echo "waiting to start clients"
 sleep 10
@@ -49,7 +53,7 @@ echo "starting clients..."
 ./client.sh 1 $conf < ../prop1 &
 ./client.sh 2 $conf < ../prop2 &
 
-sleep 5
+sleep 20
 
 $KILLCMD
 wait

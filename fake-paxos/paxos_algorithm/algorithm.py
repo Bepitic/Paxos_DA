@@ -73,28 +73,47 @@ class Components:
             if (self.c_rnd == rnd):
                 sentinel += 1
 
-        k = -1
-        v = None
-        for message in list_msg:
-            rnd =message['msg']['rnd']
-            v_rnd = message['msg']['v_rnd']
-            v_val =message['msg']['v_val']
-            if(sentinel >= num_Q): #We have a quorum
-                if (self.c_rnd == rnd):# We are in the Quorum group
-                    if(k < v_rnd):
-                        k = v_rnd
-                        v = v_val
-                    if (k == 0):
-                        self.c_val = self.value
-                    else:
-                        self.c_val = v
-                    print(self.c_val)
-        if(sentinel >= num_Q): #We have a quorum
-            
-            msg = Components.build_msg("P2A", "proposer", self.instance_paxos, self.id, {"c_rnd":self.c_rnd,"c_val":self.c_val })
-            print(msg)
 
-            self.send(msg, self.receivers)
+        ## shega
+        if (sentinel >= num_Q ):
+            k=0
+            list_v=[]
+            for promise in list_msg:
+                if promise['msg']['v_rnd'] > k :
+                    k = promise['msg']['v_rnd']
+
+            for promise in list_msg:
+                if promise['msg']['v_rnd'] == k :
+                    list_v.append((promise['msg']['v_rnd'] ,promise['msg']['v_val'] ))
+            if k == 0:
+                self.c_val = self.value
+            else:
+                # print(list_v)
+                self.c_val = list_v[0][1]
+
+        ## Paco
+        # k = -1
+        # v = None
+        # for message in list_msg:
+        #     rnd = message['msg']['rnd']
+        #     v_rnd = message['msg']['v_rnd']
+        #     v_val = message['msg']['v_val']
+        #     if(sentinel >= num_Q): #We have a quorum
+        #         if (self.c_rnd == rnd):# We are in the Quorum group
+        #             if(k < v_rnd):
+        #                 k = v_rnd
+        #                 v = v_val
+        #             if (k == 0):
+        #                 self.c_val = self.value
+        #             else:
+        #                 self.c_val = v
+        #             print(self.c_val)
+        # if(sentinel >= num_Q): #We have a quorum
+        #     
+        #     msg = Components.build_msg("P2A", "proposer", self.instance_paxos, self.id, {"c_rnd":self.c_rnd,"c_val":self.c_val })
+        #     print(msg)
+
+        #     self.send(msg, self.receivers)
     
     def acceptor_phase_2B(self, c_rnd,c_val):
         if(c_rnd >= self.rnd):

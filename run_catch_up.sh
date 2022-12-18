@@ -16,8 +16,10 @@ $KILLCMD
 
 cd $projdir
 
-../generate.sh $n > ../prop1
-../generate.sh $n > ../prop2
+# ../generate.sh $n > ../prop1
+# ../generate.sh $n > ../prop2
+../generate_2.sh $n 0 30000 "prop1" #> ../prop1
+../generate_2.sh $n 40000 60000 "prop2" #> ../prop2
 
 echo "starting acceptors..."
 
@@ -50,7 +52,7 @@ sleep 1
 echo "starting client 2..."
 ./client.sh 2 $conf < ../prop2 &
 
-sleep 5
+sleep 20
 
 $KILLCMD
 wait
