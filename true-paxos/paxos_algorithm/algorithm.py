@@ -84,18 +84,25 @@ class Components:
             # print(msg)
             self.send(msg, self.receivers)
 
-    def proposer_phase_3(self, list_from_quorum, listeners,proposers):
-        # Paco        
-        sentinel = 0
-        for message in list_from_quorum:
-            v_rnd = message['msg']['v_rnd']
-            self.v_val =  message['msg']['v_val']
-            if (v_rnd == self.c_rnd):
-                sentinel += 1
-        if (sentinel >= self.quorum_value):
+    def proposer_phase_3(self, list_from_quorum, listeners,proposers, retry=False):
+        # Paco  
+        #if not retry:
+            sentinel = 0
+            for message in list_from_quorum:
+                v_rnd = message['msg']['v_rnd']
+                if (v_rnd == self.c_rnd):
+                    sentinel += 1
+                    self.v_val =  message['msg']['v_val']
+
+            if (sentinel >= self.quorum_value):
+                
+                msg = Components.build_msg("DECISION", "proposer", self.instance_paxos, self.id, {"v_val":self.v_val, "c_rnd": self.c_rnd})
+                #print(msg)
+                self.send(msg, listeners)
+                self.send(msg, proposers)
+        #else:
+        #    msg = Components.build_msg("DECISION", "proposer", self.instance_paxos, self.id, {"v_val":self.v_val, "c_rnd": self.c_rnd})
+        #    #print(msg)
+        #    self.send(msg, listeners) 
+        #    self.send(msg, proposers)  
             
-            msg = Components.build_msg("DECISION", "proposer", self.instance_paxos, self.id, {"v_val":list_from_quorum[0]["msg"]["v_val"], "c_rnd": self.c_rnd})
-            #print(msg)
-            self.send(msg, listeners) 
-            self.send(msg, proposers)   
-        

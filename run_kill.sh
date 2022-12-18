@@ -1,25 +1,21 @@
 #!/usr/bin/env bash
 
-# Change the loss percentage here
-LOSS=0.1
-
 projdir="$1"
 conf=`pwd`/paxos.conf
 n="$2"
-
+id="2"
 if [[ x$projdir == "x" || x$n == "x" ]]; then
 	echo "Usage: $0 <project dir> <number of values per proposer>"
     exit 1
 fi
 
 # following line kills processes that have the config file in its cmdline
+
 KILLCMD="pkill -f $conf"
 
 $KILLCMD
 
 cd $projdir
-
-../loss_set.sh $LOSS
 
 # ../generate.sh $n > ../prop1
 # ../generate.sh $n > ../prop2
@@ -28,6 +24,7 @@ cd $projdir
 ../generate_2.sh $n 40000 60000 "prop2" #> ../prop2
 
 
+sleep 1
 echo "starting acceptors..."
 
 ./acceptor.sh 1 $conf &
@@ -44,20 +41,25 @@ sleep 1
 echo "starting proposers..."
 
 ./proposer.sh 1 $conf &
-# ./proposer.sh 2 $conf &
+./proposer.sh 2 $conf &
 
 echo "waiting to start clients"
 sleep 10
+
 echo "starting clients..."
 
 ./client.sh 1 $conf < ../prop1 &
+../pkill_acceptor.sh $id
+../pkill_acceptor.sh 1
 ./client.sh 2 $conf < ../prop2 &
 
-sleep 20
+# sleep 1 
+# # User this command to kill the acceptor
+
+
+sleep 120
 
 $KILLCMD
 wait
-
-../loss_unset.sh
 
 cd ..

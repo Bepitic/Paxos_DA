@@ -39,7 +39,6 @@ class Proposer:
             if self.active_paxos==False:
                 if substract(self.A_Delivered,self.R_Del):
                     undelivered = substract(self.A_Delivered,self.R_Del)[:10]
-
                     print(f' UNDELIVERED :{undelivered}, adel{self.A_Delivered}, R_del:{self.R_Del}')
                     component = Components(self.proposer_id,  self.mcast_sender, self.config_the_receivers, self.paxos_id, undelivered, self.c_rnd, self.quorum_value)
                     self.components[self.paxos_id] = component
@@ -100,6 +99,18 @@ class Proposer:
                                 if len(self.quorum[message["paxos_id"]][message["phase"]]) >= self.quorum_value:
                                     component.proposer_phase_3(self.quorum[message["paxos_id"]][message["phase"]], self.listeners,self.config_mcast_receiver)
                                     
+            elif message["origin"] == "learner":
+                if message["paxos_id"] in self.components:
+                    component = self.components[message["paxos_id"]] 
+                    msg = Components.build_msg("P2B", "acceptor", component.instance_paxos, component.id, {"v_rnd":-1,"v_val":-1 , "proposer_id":component.id})
+                    self.mcast_sender.sendto(msg, self.config_mcast_receiver)
+                    # send back to learner\
+                    
+                    # remove from the A_DEL the value related with this instance of the paxos  in this case component.v_val
+                    # What if there is an going paxos, and I set the paxos it true, I can break it or not. 
+                    # self.active_paxos = True
+                
+
 class Acceptor:
     def __init__(self, acceptor_id, config_mcast_receiver, config_the_receivers, quorum_value):
         self.acceptor_id = acceptor_id
