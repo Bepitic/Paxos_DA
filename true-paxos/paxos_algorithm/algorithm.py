@@ -84,7 +84,7 @@ class Components:
                 validate_v_rnd = False
         if validate_v_rnd: 
             msg = Components.build_msg("DECISION", "proposer", self.instance_paxos, self.id, {"v_val":list_from_quorum[0]["msg"]["v_val"], "c_rnd": self.c_rnd})
-            print(msg)
+            #print(msg)
             self.send(msg, listeners) 
             self.send(msg, proposers)   
         

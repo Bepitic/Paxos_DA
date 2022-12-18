@@ -33,17 +33,22 @@ class Proposer:
         while True: 
             if(self.active_paxos == True and time.time()- self.time > self.delta):
                 self.active_paxos=False
+                self.c_rnd = self.c_rnd + 1
+                self.paxos_id = self.paxos_id -1
+
             if self.active_paxos==False:
                 if substract(self.A_Delivered,self.R_Del):
                     undelivered = substract(self.A_Delivered,self.R_Del)[:1]
-                    print(undelivered)
+
+                    print(f' UNDELIVERED :{undelivered}, adel{self.A_Delivered}, R_del:{self.R_Del}')
                     component = Components(self.proposer_id,  self.mcast_sender, self.config_the_receivers, self.paxos_id, undelivered, self.c_rnd, self.quorum_value)
                     self.components[self.paxos_id] = component
                     self.components[self.paxos_id].proposer_phase_1A(self.c_rnd)  
-                    self.c_rnd = self.c_rnd + 1
                     self.active_paxos = True
                     self.time = time.time()
                     self.delta = random.randint(10,20)
+                    self.paxos_id = self.paxos_id +1
+
             msg = self.mcast_receiver.recv(2**29)   
             message = decode_message(msg)
             if message["origin"] == "client": 
@@ -60,12 +65,15 @@ class Proposer:
                                     decision.append(item)
                             else:
                                 decision.append(message["msg"]['v_val'])
+                            
                             clean_decision = substract(self.A_Delivered, decision)
+                            if(clean_decision):
+                                self.active_paxos = False
                             self.A_Delivered = self.A_Delivered + clean_decision
-                            self.active_paxos = False
-                            self.paxos_id = self.paxos_id +1
-                            self.c_rnd = message["msg"]["c_rnd"]
-                            self.c_rnd = self.c_rnd + 1
+                            print(f'pax_part:{message}')
+
+                            #self.c_rnd = message["msg"]["c_rnd"]
+                            self.c_rnd = 1+ float("0."+str(self.proposer_id))
                             
             elif message["origin"] == "acceptor":
                     if message["phase"] == "P1B":  
