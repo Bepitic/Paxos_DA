@@ -65,14 +65,12 @@ class Components:
         #     else: 
         #         self.c_val = list_V[0][1]
         sentinel = 0
-        print("1")
         for message in list_from_quorum:
             message['msg']['rnd']
             rnd = message['msg']['rnd']
 
             if (self.c_rnd == rnd):
                 sentinel += 1
-
 
         ## shega
         if (sentinel >= self.quorum_value):
